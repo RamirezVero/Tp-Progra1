@@ -4,6 +4,12 @@ package juego;
 import java.awt.Color;
 import java.awt.Image;
 
+package juego;
+
+
+import java.awt.Color;
+import java.awt.Image;
+
 import entorno.Entorno;
 import entorno.Herramientas;
 import entorno.InterfaceJuego;
@@ -11,20 +17,20 @@ import entorno.InterfaceJuego;
 public class Juego extends InterfaceJuego
 {
 	// El objeto Entorno que controla el tiempo y otros
-	private Entorno entorno;
-	
 	// Variables y métodos propios de cada grupo
+	private Entorno entorno;
 	private Image fondo;
+	private Murcielago Murcielago;
 	
 	Juego()
 	{
 		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, "El camino de Gondolf", 800, 600);
-		
-		
 		// Inicializar lo que haga falta para el juego
 		this.fondo = Herramientas.cargarImagen("suelo.jpg");
 		this.entorno.dibujarImagen(fondo, 400, 300, 0);
+		this.Murcielago = new Murcielago(100, 100, 5); // x, y, velocidad
+		
 
 		// Inicia el juego!
 		this.entorno.iniciar();
@@ -40,6 +46,8 @@ public class Juego extends InterfaceJuego
 	{
 		// Procesamiento de un instante de tiempo
 		this.entorno.dibujarImagen(fondo, 400, 300, 0);
+		Murcielago.mover();
+		Murcielago.dibujar(entorno);
 		
 	}
 	
