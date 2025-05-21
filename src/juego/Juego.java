@@ -71,6 +71,8 @@ public class Juego extends InterfaceJuego
 		this.entorno.dibujarImagen(fondo, 400, 300, 0);
 		//Murcielago.mover();
 		murcielago.dibujar(entorno);
+		murcielago.mover(entorno);
+		
 		gondolf.dibujar(entorno);
 		//botones
 		botonAgua.dibujar(entorno);
