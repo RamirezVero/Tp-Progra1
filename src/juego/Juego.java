@@ -2,6 +2,7 @@ package juego;
 
 
 import java.awt.Color;
+//import java.awt.Color;
 import java.awt.Image;
 
 import entorno.Entorno;
@@ -15,6 +16,17 @@ public class Juego extends InterfaceJuego
 	
 	// Variables y métodos propios de cada grupo
 	private Image fondo;
+	private Boton botonAgua;
+	private Boton botonFuego;
+	private Roca piedra1;
+	private Roca piedra2;
+	private Roca piedra3;
+	private Roca piedra4;
+	private Roca piedra5;
+	private Color miGris;
+	private Color miAzul;
+	private Color miRojo;
+	
 	
 	Juego()
 	{
@@ -23,9 +35,18 @@ public class Juego extends InterfaceJuego
 		
 		
 		// Inicializar lo que haga falta para el juego
-		this.fondo = Herramientas.cargarImagen("suelo.jpg");
+		this.fondo = Herramientas.cargarImagen("fondo.jpg");
 		this.entorno.dibujarImagen(fondo, 400, 300, 0);
-
+		this.miGris = new Color (122, 135, 150 );
+		this.miAzul = new Color(17, 97, 158);
+		this.miRojo =  new Color(145, 29, 6);
+		this.botonAgua = new Boton ( 725, 150, 80, 60, "Agua", miAzul);
+		this.botonFuego = new Boton ( 725, 250, 80, 60,"Fuego",miRojo);
+		this.piedra1 = new Roca ( 100,300,entorno);
+		this.piedra2 = new Roca ( 550,150,entorno);
+		this.piedra3 = new Roca ( 350,200,entorno);
+		this.piedra4 = new Roca ( 250,450,entorno);
+		this.piedra5 = new Roca ( 450,350,entorno);
 		// Inicia el juego!
 		this.entorno.iniciar();
 	}
@@ -40,6 +61,28 @@ public class Juego extends InterfaceJuego
 	{
 		// Procesamiento de un instante de tiempo
 		this.entorno.dibujarImagen(fondo, 400, 300, 0);
+		
+		//botones
+		botonAgua.dibujar(entorno);
+		botonFuego.dibujar(entorno);	
+		
+		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)
+				&& botonFuego.cursorSobreBoton(entorno)) {				
+				botonFuego.setColor(miGris);
+				//botonFuego.estaPresionado(entorno.BOTON_IZQUIERDO);
+		}
+		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)
+				&& botonAgua.cursorSobreBoton(entorno)) {				
+				botonAgua.setColor(miGris);
+				//botonAgua.estaPresionado(entorno.BOTON_IZQUIERDO);
+		}
+		
+		//Piedras		
+		piedra1.dibujar(entorno);
+		piedra2.dibujar(entorno);
+		piedra3.dibujar(entorno);
+		piedra4.dibujar(entorno);
+		piedra5.dibujar(entorno);
 		
 	}
 	
