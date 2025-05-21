@@ -26,6 +26,9 @@ public class Juego extends InterfaceJuego
 	private Color miAzul;
 	private Color miRojo;
 	
+	private Gondolf gondolf; 
+	
+	
 
 	private Murcielago murcielago;
 	
@@ -49,7 +52,7 @@ public class Juego extends InterfaceJuego
 		this.piedra5 = new Roca ( 450,350,entorno);
 
 		this.murcielago = new Murcielago(100, 100, entorno); // x, y, velocidad
-		
+		this.gondolf = new Gondolf(400, 300);
 
 
 		// Inicia el juego!
@@ -68,7 +71,7 @@ public class Juego extends InterfaceJuego
 		this.entorno.dibujarImagen(fondo, 400, 300, 0);
 		//Murcielago.mover();
 		murcielago.dibujar(entorno);
-		
+		gondolf.dibujar(entorno);
 		//botones
 		botonAgua.dibujar(entorno);
 		botonFuego.dibujar(entorno);	

@@ -20,4 +20,8 @@ public class Murcielago {
 	public void dibujar(Entorno e) {
 		e.dibujarImagen(murcielago, this.x, this.y, 0, 0.4);
 	}
+
+
+	
+
 }

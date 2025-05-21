@@ -6,8 +6,7 @@ import entorno.Entorno;
 import entorno.Herramientas;
 
 public class Gondolf {
-/*<<<<<<< HEAD
-=======*/
+
 	double x;
 	double y;
 	double angulo;
@@ -16,18 +15,22 @@ public class Gondolf {
 	Image imgFrente;
 	Image imgEspalda;
 	boolean moverse;
+	Entorno e;
 	
 	
 	public Gondolf(int x, int y) {
 		this.x = x;
 		this.y = y;
 		moverse = false;
-		imgIzquierda = Herramientas.cargarImagen("izquierdaMG.png");
-		imgDerecha = Herramientas.cargarImagen("derecha.png");
-		imgFrente = Herramientas.cargarImagen("frente.png");
-		imgEspalda = Herramientas.cargarImagen("espaldaMG.png");
+		imgIzquierda = Herramientas.cargarImagen("izquierdaMG.jpg");
+		imgDerecha = Herramientas.cargarImagen("derecha.jpg");
+		imgFrente = Herramientas.cargarImagen("frente.jpg");
+		imgEspalda = Herramientas.cargarImagen("espaldaMG.jpg");
 	}
-//>>>>>>> 76687aa0c61c1c6161e7fc930587653e81b32215
+
 	
+	public void dibujar(Entorno e){
+		e.dibujarImagen(imgIzquierda, this.x, this.y, 0, 0.3);
+	}
 
 }
