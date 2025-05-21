@@ -1,4 +1,5 @@
 /juego/
+<<<<<<< HEAD
 /piedra.bmp
 /suelo.jpg
 /mini.jpg
@@ -7,3 +8,11 @@
 /fondo.jpg
 /pared.jpg
 /piedra.jpg
+=======
+/images/
+/frente.jpg
+/derecha.jpg
+/izquierda.jpg
+/espalda.jpg
+>>>>>>> 76687aa0c61c1c6161e7fc930587653e81b32215
+/murcielago.gif

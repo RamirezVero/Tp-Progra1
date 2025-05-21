@@ -9,7 +9,6 @@ import entorno.Herramientas;
 public class Roca {
 	double x;
 	double y;
-	//double diametro;
 	Image piedra;
 	Entorno e;
 		
