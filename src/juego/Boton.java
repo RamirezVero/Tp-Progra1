@@ -39,6 +39,7 @@ public class Boton {
 	}
 	public void setColor(Color c) {
 		this.color = c;
+		//hayHechizoSeleccionado = true;
 		
 	}
 

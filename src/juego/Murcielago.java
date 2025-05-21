@@ -1,27 +1,27 @@
-
 package juego;
 
 import java.awt.Image;
+
 import entorno.Entorno;
 import entorno.Herramientas;
 
 public class Murcielago {
+	Entorno e;
 	double x;
 	double y;
 	double velocidadX;
 	Image murcielago;
-
-	public Murcielago(double x, double y) {
+	
+	public Murcielago(double x, double y, Entorno e) {
 		this.x = x;
 		this.y = y;
 		this.velocidadX = 2; // Velocidad inicial hacia la derecha
 		this.murcielago = Herramientas.cargarImagen("murcielago.gif");
 	}
-
+	
 	public void dibujar(Entorno e) {
 		e.dibujarImagen(murcielago, this.x, this.y, 0, 0.4);
 	}
-
 	public void mover(Entorno e) {
 		this.x += velocidadX;
 		// Límite izquierdo (pared izquierda)
@@ -30,6 +30,3 @@ public class Murcielago {
 		}
 	}
 }
-		
-	
-

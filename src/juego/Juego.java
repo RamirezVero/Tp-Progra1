@@ -74,6 +74,20 @@ public class Juego extends InterfaceJuego
 		murcielago.mover(entorno);
 		
 		gondolf.dibujar(entorno);
+		
+		if (entorno.estaPresionada('a')) {
+		    gondolf.moverIzquieda();
+		}
+		if (entorno.estaPresionada('d')) {
+		    gondolf.moverDerecha();
+		}
+		if (entorno.estaPresionada('w')) {
+		    gondolf.moverArriba();
+		}
+		if (entorno.estaPresionada('s')) {
+		    gondolf.moverAbajo();
+		}
+		
 		//botones
 		botonAgua.dibujar(entorno);
 		botonFuego.dibujar(entorno);	
