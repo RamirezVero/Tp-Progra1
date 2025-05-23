@@ -1,17 +1,11 @@
 package juego;
 
-
-import java.awt.Color;
-import java.awt.Image;
-
-package juego;
-
-
-import java.awt.Color;
-import java.awt.Image;
-
 import entorno.Entorno;
 import entorno.Herramientas;
+
+
+import java.awt.Color;
+import java.awt.Image;
 import entorno.InterfaceJuego;
 
 public class Juego extends InterfaceJuego
@@ -20,7 +14,8 @@ public class Juego extends InterfaceJuego
 	// Variables y métodos propios de cada grupo
 	private Entorno entorno;
 	private Image fondo;
-	private Murcielago Murcielago;
+	Gondolf gondolf;
+//	private Murcielago Murcielago;
 	
 	Juego()
 	{
@@ -29,8 +24,10 @@ public class Juego extends InterfaceJuego
 		// Inicializar lo que haga falta para el juego
 		this.fondo = Herramientas.cargarImagen("suelo.jpg");
 		this.entorno.dibujarImagen(fondo, 400, 300, 0);
-		this.Murcielago = new Murcielago(100, 100, 5); // x, y, velocidad
-		
+//		this.Murcielago = new Murcielago(100, 100, 5); // x, y, velocidad
+	
+		gondolf = new  Gondolf(100, 100);
+		this.entorno.dibujarImagen(Gondolf.class, this.gondolf.imgDerecha, this.entorno.0, 0);;
 
 		// Inicia el juego!
 		this.entorno.iniciar();
@@ -46,15 +43,20 @@ public class Juego extends InterfaceJuego
 	{
 		// Procesamiento de un instante de tiempo
 		this.entorno.dibujarImagen(fondo, 400, 300, 0);
-		Murcielago.mover();
-		Murcielago.dibujar(entorno);
+//		Murcielago.mover();
+//		Murcielago.dibujar(entorno);
 		
+		
+		this.entorno.dibujarImagen(gondolf.	imgDerecha, 400, 300,0, 0.5);
+	//	this.entorno.dibujarRectangulo(500, 400, 100, 50, 0.0, Color.CYAN);
+		
+
 	}
 	
-
 	@SuppressWarnings("unused")
 	public static void main(String[] args)
 	{
 		Juego juego = new Juego();
 	}
+	
 }

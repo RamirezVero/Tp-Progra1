@@ -5,6 +5,8 @@ import java.awt.Image;
 import entorno.Entorno;
 import entorno.Herramientas;
 
+
+
 public class Gondolf {
 	double x;
 	double y;
@@ -25,6 +27,19 @@ public class Gondolf {
 		imgFrente = Herramientas.cargarImagen("frente.png");
 		imgEspalda = Herramientas.cargarImagen("espaldaMG.png");
 	}
+
+	public  void dibujarse(Entorno entorno) {
+
+		if (moverse) 
+			entorno.dibujarImagen(imgEspalda, this.x, this.y, this.angulo, 0.3);
+
+		else 
+			entorno.dibujarImagen(imgFrente, this.x, this.y, this.angulo, 0.3);
+
+	}
+		
+		
 	
+
 
 }
