@@ -9,6 +9,9 @@ import entorno.Herramientas;
 public class Roca {
 	double x;
 	double y;
+	double ancho;
+	double alto;
+	double escala;
 	Image piedra;
 	Entorno e;
 		
@@ -16,12 +19,14 @@ public class Roca {
 		
 		this.x = x;
 		this.y = y;
+		this.ancho =10;
+		this.alto = 10;		
 		this.piedra = Herramientas.cargarImagen("piedra.jpg");
 		
 	}
 
-	public void dibujar(Entorno e){
-		e.dibujarImagen(piedra, this.x, this.y, 0, 0.3);
+	public void dibujar(Entorno e, double escala){
+		e.dibujarImagen(piedra, this.x, this.y, 0, escala);
 	}
 	
 	

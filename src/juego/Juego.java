@@ -1,17 +1,9 @@
 package juego;
 
-
-
 import java.awt.Color;
 import java.awt.Image;
-
-
 import entorno.Entorno;
 import entorno.Herramientas;
-
-
-import java.awt.Color;
-import java.awt.Image;
 import entorno.InterfaceJuego;
 
 public class Juego extends InterfaceJuego
@@ -32,13 +24,9 @@ public class Juego extends InterfaceJuego
 	private Roca piedra5;
 	private Color miGris;
 	private Color miAzul;
-	private Color miRojo;
-	
-	
-	
+	private Color miRojo;	
 
 	private Murcielago murcielago;
-
 	
 	Juego()
 	{
@@ -56,11 +44,11 @@ public class Juego extends InterfaceJuego
 		this.miRojo =  new Color(145, 29, 6);
 		this.botonAgua = new Boton ( 725, 150, 80, 60, "Agua", miAzul);
 		this.botonFuego = new Boton ( 725, 250, 80, 60,"Fuego",miRojo);
-		this.piedra1 = new Roca ( 100,300,entorno);
-		this.piedra2 = new Roca ( 550,150,entorno);
-		this.piedra3 = new Roca ( 350,200,entorno);
-		this.piedra4 = new Roca ( 250,450,entorno);
-		this.piedra5 = new Roca ( 450,350,entorno);
+		this.piedra1 = new Roca ( 100,300, entorno);
+		this.piedra2 = new Roca ( 550,150, entorno);
+		this.piedra3 = new Roca ( 350,200, entorno);
+		this.piedra4 = new Roca ( 250,450, entorno);
+		this.piedra5 = new Roca ( 450,350, entorno);
 
 		this.murcielago = new Murcielago(100, 100, entorno); // x, y, velocidad
 		this.gondolf = new Gondolf(400, 300);
@@ -101,6 +89,8 @@ public class Juego extends InterfaceJuego
 		    gondolf.moverAbajo();
 		}
 		
+		
+		
 		//botones
 		botonAgua.dibujar(entorno);
 		botonFuego.dibujar(entorno);	
@@ -117,13 +107,13 @@ public class Juego extends InterfaceJuego
 		}
 		
 		//Piedras		
-		piedra1.dibujar(entorno);
-		piedra2.dibujar(entorno);
-		piedra3.dibujar(entorno);
-		piedra4.dibujar(entorno);
-		piedra5.dibujar(entorno);
-		this.entorno.dibujarImagen(gondolf.	imgDerecha, 400, 300,0, 0.5);
-	//	this.entorno.dibujarRectangulo(500, 400, 100, 50, 0.0, Color.CYAN);
+		piedra1.dibujar(entorno, 0.4);
+		piedra2.dibujar(entorno, 0.4);
+		piedra3.dibujar(entorno, 0.3 );
+		piedra4.dibujar(entorno, 0.4 );
+		piedra5.dibujar(entorno,0.4 );
+		
+	//this.entorno.dibujarRectangulo(500, 400, 100, 50, 0.0, Color.CYAN);
 		
 
 	}
