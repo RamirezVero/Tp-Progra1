@@ -107,6 +107,8 @@ public class Gondolf {
 			this.vidas --;
 		}
 		
+	
+		
 		//getters de los límites del objeto
 		public double getBordeDer() {
 	    	return this.x +(this.ancho/2);

@@ -85,11 +85,11 @@ public class Juego extends InterfaceJuego
 		botonFuego.dibujar(entorno);
 		
 		//Piedras		
-		piedra1.dibujar(entorno, 0.4);
-		piedra2.dibujar(entorno, 0.4);
-		piedra3.dibujar(entorno, 0.3 );
-		piedra4.dibujar(entorno, 0.4 );
-		piedra5.dibujar(entorno, 0.4 );	
+		piedra1.dibujar(entorno, 0.2);
+		piedra2.dibujar(entorno, 0.3);
+		piedra3.dibujar(entorno, 0.4 );
+		piedra4.dibujar(entorno, 0.5 );
+		piedra5.dibujar(entorno, 0.6 );	
 
 		//Murcielago.mover();
 		murcielago.dibujar(entorno);
@@ -114,7 +114,7 @@ public class Juego extends InterfaceJuego
 		}
 		if (gondolf.colisionaCon(piedra1)) {
 		    gondolf.pierdeVida();
-		    System.out.println(gondolf.vidas);
+		    System.out.println(gondolf.vidas);//para probar si la colision es detectada, después borrar esto
 		}
 		
 		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
