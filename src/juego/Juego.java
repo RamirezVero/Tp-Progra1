@@ -92,9 +92,9 @@ public class Juego extends InterfaceJuego
 		piedra5.dibujar(entorno, 0.6 );	
 
 		//Murcielago.mover();
-		murcielago.dibujar(entorno);
-		murcielago.mover(entorno);
-		
+		murcielago.dibujarse(entorno);
+		murcielago.mover();
+		murcielago.cambiarAngulo(gondolf.x, gondolf.y);
 		gondolf.dibujar(entorno);
 		
 		
