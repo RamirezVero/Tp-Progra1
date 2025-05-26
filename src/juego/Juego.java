@@ -15,11 +15,7 @@ public class Juego extends InterfaceJuego
 
 	private Boton botonAgua;
 	private Boton botonFuego;
-	/*private Roca piedra1;
-	private Roca piedra2;
-	private Roca piedra3;
-	private Roca piedra4;
-	private Roca piedra5;*/
+	
 	private Roca[] rocas;
 	private Color miGris;
 	private Color miAzul;
@@ -43,21 +39,18 @@ public class Juego extends InterfaceJuego
 		// Inicializar lo que haga falta para el juego
 		this.fondo = Herramientas.cargarImagen("fondo.jpg");
 		this.entorno.dibujarImagen(fondo, 400, 100, 0);
-
-//		this.Murcielago = new Murcielago(100, 100, 5); // x, y, velocidad
 	
-
 		this.miGris = new Color (122, 135, 150 );
 		this.miAzul = new Color(17, 97, 158);
 		this.miRojo =  new Color(145, 29, 6);
 		this.botonAgua = new Boton ( 725, 150, 80, 60, "Agua", miAzul);
 		this.botonFuego = new Boton ( 725, 250, 80, 60,"Fuego",miRojo);
 		this.rocas = new Roca[5];
-		this.rocas[0] = new Roca ( 100,300, entorno);
-		this.rocas[1] = new Roca ( 550,150, entorno);
-		this.rocas[2] = new Roca ( 350,200, entorno);
-		this.rocas[3] = new Roca ( 250,450, entorno);
-		this.rocas[4] = new Roca ( 450,350, entorno);
+		this.rocas[0] = new Roca ( 100,300, 0.3, entorno);
+		this.rocas[1] = new Roca ( 550,150, 0.4, entorno);
+		this.rocas[2] = new Roca ( 350,200,0.5, entorno);
+		this.rocas[3] = new Roca ( 250,450,0.6, entorno);
+		this.rocas[4] = new Roca ( 450,350,0.7, entorno);
 
 		this.murcielago = new Murcielago(100, 100, entorno); // x, y, velocidad
 		this.gondolf = new Gondolf(400, 300);
@@ -86,15 +79,9 @@ public class Juego extends InterfaceJuego
 		botonAgua.dibujar(entorno);
 		botonFuego.dibujar(entorno);
 		
-		//Piedras		
-		/*piedra1.dibujar(entorno, 0.2);
-		piedra2.dibujar(entorno, 0.3);
-		piedra3.dibujar(entorno, 0.4 );
-		piedra4.dibujar(entorno, 0.5 );
-		piedra5.dibujar(entorno, 0.6 );	*/
-		
+		//Piedras
 		for (int i = 0; i < rocas.length; i++) {
-		    rocas[i].dibujar(entorno, 0.3);
+		    rocas[i].dibujar(entorno);
 		}	
 
 		//Murcielago.mover();
@@ -103,26 +90,60 @@ public class Juego extends InterfaceJuego
 		murcielago.cambiarAngulo(gondolf.x, gondolf.y);
 		gondolf.dibujar(entorno);
 		
-		
-		
-		// movimientos de gondolf
+		// Movimiento a la izquierda
 		if (entorno.estaPresionada('a')) {
-		    gondolf.moverIzquieda();
+		    boolean hayColision = false;
+		   
+		    for (Roca roca : rocas) {		    	 
+		        if (gondolf.colisionariaCon(roca, -gondolf.velocidad, 0)) {
+		            hayColision = true;
+		            
+		        }
+		    }
+		    if (!hayColision) {
+		        gondolf.moverIzquierda();
+		    }
 		}
+		// Movimiento a la derecha
 		if (entorno.estaPresionada('d')) {
-		    gondolf.moverDerecha();
+		    boolean hayColision = false;
+		    for (Roca roca : rocas) {
+		        if (gondolf.colisionariaCon(roca, gondolf.velocidad, 0)) {
+		            hayColision = true;
+		            
+		        }
+		    }
+		    if (!hayColision) {
+		        gondolf.moverDerecha();
+		    }
 		}
+		// Movimiento hacia arriba
 		if (entorno.estaPresionada('w')) {
-		    gondolf.moverArriba();
+		    boolean hayColision = false;
+		    for (Roca roca : rocas) {
+		        if (gondolf.colisionariaCon(roca, 0, -gondolf.velocidad)) {
+		            hayColision = true;
+		            
+		        }
+		    }
+		    if (!hayColision) {
+		        gondolf.moverArriba();
+		    }
 		}
+		// Movimiento hacia abajo
 		if (entorno.estaPresionada('s')) {
-		    gondolf.moverAbajo();
+		    boolean hayColision = false;
+		    for (Roca roca : rocas) {
+		        if (gondolf.colisionariaCon(roca, 0, gondolf.velocidad)) {
+		            hayColision = true;
+		            
+		        }
+		    }
+		    if (!hayColision) {
+		        gondolf.moverAbajo();
+		    }
 		}
-		if (gondolf.colisionaCon(this.rocas[0])) {
-		    gondolf.pierdeVida();
-		    System.out.println(gondolf.vidas);//para probar si la colision es detectada, después borrar esto
-		}
-		
+
 		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
 		    double mouseX = entorno.mouseX();
 		    double mouseY = entorno.mouseY();

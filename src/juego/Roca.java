@@ -15,20 +15,19 @@ public class Roca {
 	Image piedra;
 	Entorno e;
 		
-	public Roca(double x, double y, Entorno e) {
-		
+	public Roca(double x, double y,double escala,  Entorno e) {
 		this.x = x;
-		this.y = y;
-		this.ancho =10;
-		this.alto =10;		
-		this.piedra = Herramientas.cargarImagen("piedra.jpg");
-		
+	    this.y = y;
+	    this.escala = escala;
+	    this.piedra = Herramientas.cargarImagen("piedra100x100.jpg");
+	    this.ancho = piedra.getWidth(null) * this.escala;
+	    this.alto = piedra.getHeight(null) * this.escala;
+	    this.e = e;
 	}
 
-	public void dibujar(Entorno e, double escala){
+	public void dibujar(Entorno e){
 		e.dibujarImagen(piedra, this.x, this.y, 0, escala);
 	}
-
 	
 	//getters de los límites del objeto
 		public double getBordeDer() {

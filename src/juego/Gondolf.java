@@ -33,13 +33,15 @@ public class Gondolf {
 	
 	public Gondolf(int x, int y) {
 		this.x = x;
-		this.y = y;		
+		this.y = y;			
 		this.velocidad= 3.0;
 		this.escala =  0.1;
 		imgIzquierda = Herramientas.cargarImagen("izquierdaMG.jpg");
 		imgDerecha = Herramientas.cargarImagen("derecha.jpg");
 		imgFrente = Herramientas.cargarImagen("frente.jpg");
 		imgEspalda = Herramientas.cargarImagen("espaldaMG.jpg");
+		this.ancho = imgFrente.getWidth(null)* this.escala;
+		this.alto = imgFrente.getHeight(null)* this.escala;
 		bordePantallaDer = 640;
 		bordePantallaIzq = 10;
 		bordePantallaSup = 30;
@@ -67,76 +69,74 @@ public class Gondolf {
 	}
 		
 	
-		public void moverDerecha () {
-			if (this.x + this.velocidad < this.bordePantallaDer) {
-				this.x += this.velocidad;
-				direccionActual = 'd';
-			}
+	public void moverDerecha () {
+		if (this.x + this.velocidad < this.bordePantallaDer) {
+			this.x += this.velocidad;
+			direccionActual = 'd';
 		}
-		public void moverIzquieda () {
-			if (this.x - this.velocidad > this.bordePantallaIzq) {
-				this.x -= this.velocidad;
-				this.direccionActual = 'a';
-			}
+	}
+	public void moverIzquierda () {
+		if (this.x - this.velocidad > this.bordePantallaIzq) {
+			this.x -= this.velocidad;
+			this.direccionActual = 'a';
 		}
-		public void moverArriba() {
-			if (this.y - this.velocidad > this.bordePantallaSup) {
-				this.y -= this.velocidad;
-				direccionActual = 'w';
-			}
+	}
+	public void moverArriba() {
+		if (this.y - this.velocidad > this.bordePantallaSup) {
+			this.y -= this.velocidad;
+			direccionActual = 'w';
 		}
-		
-		public void moverAbajo() {
-			if (this.y + this.velocidad <this.bordePantallaInf) {
-				this.y += this.velocidad;				
-				direccionActual = 's';
-			}
+	}
+	
+	public void moverAbajo() {
+		if (this.y + this.velocidad <this.bordePantallaInf) {
+			this.y += this.velocidad;				
+			direccionActual = 's';
 		}
-		/*public void moverAbajo(Roca[] rocas) {
-		    boolean hayColision = false;
+	}
+	//metodo para simular una posición futura y ver si colisionaría:
+	public boolean colisionariaCon(Roca r, double dx, double dy) {
+	    double nuevaX = this.x + dx;
+	    double nuevaY = this.y + dy;
 
-		    for (Roca roca : rocas) {
-		        if (this.colisionaCon(roca)) {
-		            hayColision = true;
-		            break;
-		        }
-		    }
+	    double bordeIzq = nuevaX - this.ancho / 2;
+	    double bordeDer = nuevaX + this.ancho / 2;
+	    double bordeSup = nuevaY - this.alto / 2;
+	    double bordeInf = nuevaY + this.alto / 2;
 
-		    if (!hayColision && this.y + this.velocidad < this.bordePantallaInf) {
-		        this.y += this.velocidad;				
-		        direccionActual = 's';
-		    }
-		}*/
+	    return bordeDer > r.getBordeIzq() &&
+	           bordeIzq < r.getBordeDer() &&
+	           bordeInf > r.getBordeSup() &&
+	           bordeSup < r.getBordeInf();
+	}
+
 		
+	public boolean colisionaCon( Roca r) {
 		
-		
-		public boolean colisionaCon( Roca r) {
-			
-		    return this.getBordeDer() > r.getBordeIzq() &&
-		            this.getBordeIzq() < r.getBordeDer() &&
-		            this.getBordeInf() > r.getBordeSup() &&
-		            this.getBordeSup() < r.getBordeInf();
-		}
-		
-		public void pierdeVida() {
-			this.vidas --;
-		}
+	    return this.getBordeDer() > r.getBordeIzq() &&
+	            this.getBordeIzq() < r.getBordeDer() &&
+	            this.getBordeInf() > r.getBordeSup() &&
+	            this.getBordeSup() < r.getBordeInf();
+	}
+	
+	public void pierdeVida() {
+		this.vidas --;
+	}
 		
 	
-		
-		//getters de los límites del objeto
-		public double getBordeDer() {
-	    	return this.x +(this.ancho/2);
-	    }    
-	    public double getBordeIzq() {
-	    	return this.x -(this.ancho/2);
-	    }
-	    public double getBordeSup() {
-	    	return this.y -(this.alto/2);
-	    }
-	    public double getBordeInf() {
-	    	return this.y +(this.alto/2);
-	    }
+	//getters de los límites del objeto
+	public double getBordeDer() {
+    	return this.x +(this.ancho/2);
+    }    
+    public double getBordeIzq() {
+    	return this.x -(this.ancho/2);
+    }
+    public double getBordeSup() {
+    	return this.y -(this.alto/2);
+    }
+    public double getBordeInf() {
+    	return this.y +(this.alto/2);
+    }
 
 
 
