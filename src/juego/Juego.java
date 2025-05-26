@@ -15,11 +15,11 @@ public class Juego extends InterfaceJuego
 
 	private Boton botonAgua;
 	private Boton botonFuego;
-	private Roca piedra1;
+	/*private Roca piedra1;
 	private Roca piedra2;
 	private Roca piedra3;
 	private Roca piedra4;
-	private Roca piedra5;
+	private Roca piedra5;*/
 	private Roca[] rocas;
 	private Color miGris;
 	private Color miAzul;
@@ -98,9 +98,9 @@ public class Juego extends InterfaceJuego
 		}	
 
 		//Murcielago.mover();
-		murcielago.dibujar(entorno);
-		murcielago.mover(entorno);
-		
+		murcielago.dibujarse(entorno);
+		murcielago.mover();
+		murcielago.cambiarAngulo(gondolf.x, gondolf.y);
 		gondolf.dibujar(entorno);
 		
 		
