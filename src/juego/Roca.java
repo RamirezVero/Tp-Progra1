@@ -29,6 +29,19 @@ public class Roca {
 		e.dibujarImagen(piedra, this.x, this.y, 0, escala);
 	}
 	
-	
+	//getters de los límites del objeto
+		public double getBordeDer() {
+	    	return this.x +(this.ancho/2);
+	    }    
+	    public double getBordeIzq() {
+	    	return this.x -(this.ancho/2);
+	    }
+	    public double getBordeSup() {
+	    	return this.y -(this.alto/2);
+	    }
+	    public double getBordeInf() {
+	    	return this.y +(this.alto/2);
+	    }
+
 	
 }

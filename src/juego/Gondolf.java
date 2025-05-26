@@ -11,12 +11,20 @@ public class Gondolf {
 
 	double x;
 	double y;
+	double ancho;
+	double alto;
 	double angulo;
 	Image imgIzquierda;
 	Image imgDerecha;
 	Image imgFrente;
 	Image imgEspalda;
+	int bordePantallaDer;
+	int bordePantallaIzq;
+	int bordePantallaSup;
+	int bordePantallaInf;
 	private char direccionActual; // 'a', 'd', 'w', 's'
+	int vidas;
+	Roca piedra1;
 	
 
 	Entorno e;
@@ -32,6 +40,12 @@ public class Gondolf {
 		imgDerecha = Herramientas.cargarImagen("derecha.jpg");
 		imgFrente = Herramientas.cargarImagen("frente.jpg");
 		imgEspalda = Herramientas.cargarImagen("espaldaMG.jpg");
+		bordePantallaDer = 640;
+		bordePantallaIzq = 10;
+		bordePantallaSup = 30;
+		bordePantallaInf = 565;
+		vidas = 3;
+		
 		direccionActual = 'w';
 	}
 
@@ -54,30 +68,59 @@ public class Gondolf {
 		
 	
 		public void moverDerecha () {
-			if (this.x + this.velocidad < 640) {
+			if (this.x + this.velocidad < this.bordePantallaDer) {
 				this.x += this.velocidad;
 				direccionActual = 'd';
 			}
 		}
 		public void moverIzquieda () {
-			if (this.x - this.velocidad > 0) {
+			if (this.x - this.velocidad > this.bordePantallaIzq) {
 				this.x -= this.velocidad;
 				this.direccionActual = 'a';
 			}
 		}
 		public void moverArriba() {
-			if (this.y - this.velocidad > 0) {
+			if (this.y - this.velocidad > this.bordePantallaSup) {
 				this.y -= this.velocidad;
 				direccionActual = 'w';
 			}
 		}
 		
 		public void moverAbajo() {
-			if (this.y + this.velocidad <800) {
+			if (this.y + this.velocidad <this.bordePantallaInf) {
 				this.y += this.velocidad;				
 				direccionActual = 's';
 			}
 		}
+		
+		
+		
+		public boolean colisionaCon( Roca piedra1) {
+			
+		    return this.getBordeDer() > piedra1.getBordeIzq() &&
+		            this.getBordeIzq() < piedra1.getBordeDer() &&
+		            this.getBordeInf() > piedra1.getBordeSup() &&
+		            this.getBordeSup() < piedra1.getBordeInf();
+		}
+		
+		public void pierdeVida() {
+			this.vidas --;
+		}
+		
+		//getters de los límites del objeto
+		public double getBordeDer() {
+	    	return this.x +(this.ancho/2);
+	    }    
+	    public double getBordeIzq() {
+	    	return this.x -(this.ancho/2);
+	    }
+	    public double getBordeSup() {
+	    	return this.y -(this.alto/2);
+	    }
+	    public double getBordeInf() {
+	    	return this.y +(this.alto/2);
+	    }
+
 
 
 }
