@@ -92,15 +92,30 @@ public class Gondolf {
 				direccionActual = 's';
 			}
 		}
+		/*public void moverAbajo(Roca[] rocas) {
+		    boolean hayColision = false;
+
+		    for (Roca roca : rocas) {
+		        if (this.colisionaCon(roca)) {
+		            hayColision = true;
+		            break;
+		        }
+		    }
+
+		    if (!hayColision && this.y + this.velocidad < this.bordePantallaInf) {
+		        this.y += this.velocidad;				
+		        direccionActual = 's';
+		    }
+		}*/
 		
 		
 		
-		public boolean colisionaCon( Roca piedra1) {
+		public boolean colisionaCon( Roca r) {
 			
-		    return this.getBordeDer() > piedra1.getBordeIzq() &&
-		            this.getBordeIzq() < piedra1.getBordeDer() &&
-		            this.getBordeInf() > piedra1.getBordeSup() &&
-		            this.getBordeSup() < piedra1.getBordeInf();
+		    return this.getBordeDer() > r.getBordeIzq() &&
+		            this.getBordeIzq() < r.getBordeDer() &&
+		            this.getBordeInf() > r.getBordeSup() &&
+		            this.getBordeSup() < r.getBordeInf();
 		}
 		
 		public void pierdeVida() {

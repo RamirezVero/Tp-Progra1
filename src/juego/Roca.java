@@ -20,7 +20,7 @@ public class Roca {
 		this.x = x;
 		this.y = y;
 		this.ancho =10;
-		this.alto = 10;		
+		this.alto =10;		
 		this.piedra = Herramientas.cargarImagen("piedra.jpg");
 		
 	}
@@ -28,6 +28,7 @@ public class Roca {
 	public void dibujar(Entorno e, double escala){
 		e.dibujarImagen(piedra, this.x, this.y, 0, escala);
 	}
+
 	
 	//getters de los límites del objeto
 		public double getBordeDer() {
