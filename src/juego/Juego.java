@@ -23,11 +23,14 @@ public class Juego extends InterfaceJuego
 	private Murcielago murcielago;
 	Gondolf gondolf;
 	
+	Hud hud = new Hud();
+	
 	private String hechizoSeleccionado = "";
 	private int vidaActual = 100;
 	private int vidaMaxima = 100;
 	private int manaActual = 100;
 	private int manaMaximo = 100;
+	private int contEnemigosEliminados = 0;
 	int menuX = 648;
 	int menuAncho = 610;
 	int menuAlto = 600;
@@ -78,6 +81,10 @@ public class Juego extends InterfaceJuego
 		//botones
 		botonAgua.dibujar(entorno);
 		botonFuego.dibujar(entorno);
+		// actualizaciones)
+		hud.actualizarEstado(vidaActual, vidaMaxima, manaActual, manaMaximo, contEnemigosEliminados);
+		//hud.setVisibleSegúnEstadoDelJugador(gondolf.estaVivo());
+		hud.dibujar(entorno);
 		
 		//Piedras
 		for (int i = 0; i < rocas.length; i++) {
@@ -159,10 +166,11 @@ public class Juego extends InterfaceJuego
 		}
 		if( gondolf.colisionaCon(murcielago)) {
 			gondolf.pierdeVida();
+			contEnemigosEliminados ++;
 			
 			System.out.println(gondolf.vidas);
 		}
-		
+		/*
 		// Coordenadas de la barra
 		int barraX = 725;
 		int barraYVida = 350;
@@ -191,6 +199,10 @@ public class Juego extends InterfaceJuego
 		entorno.cambiarFont("Courier New", 14, Color.WHITE, entorno.NEGRITA);
 		entorno.escribirTexto(manaActual + "/" + manaMaxima, barraX - 20, barraYMana + 5);
 		
+		String eliminados=String.format("ELIMINADOS: "+ contEnemigosEliminados);
+        this.entorno.cambiarFont("Courier New",14,java.awt.Color.BLACK);
+        this.entorno.escribirTexto(eliminados,620,430);
+		*/
 		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)
 				&& botonFuego.cursorSobreBoton(entorno)) {				
 				botonFuego.setColor(miGris);

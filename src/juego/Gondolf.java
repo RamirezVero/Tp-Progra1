@@ -24,9 +24,9 @@ public class Gondolf {
 	int bordePantallaInf;
 	private char direccionActual; // 'a', 'd', 'w', 's'
 	int vidas;
+	
 	Roca piedra1;
 	Murcielago murcielago;
-	
 
 	Entorno e;
 	double velocidad;
@@ -95,6 +95,17 @@ public class Gondolf {
 			direccionActual = 's';
 		}
 	}
+	
+	public boolean estaVivo() {
+		if (this.vidas <=0 ) {
+			return false;
+		}
+		return true;
+	}
+	
+	public void pierdeVida() {
+		this.vidas --;
+	}
 	//método para simular una posición futura y ver si colisionarían:
 	public boolean colisionariaCon(Roca r, double dx, double dy) {
 	    double nuevaX = this.x + dx;
@@ -120,10 +131,6 @@ public class Gondolf {
 	            this.getBordeSup() < murcielago.getBordeInf();
 	}
 	
-	public void pierdeVida() {
-		this.vidas --;
-	}
-		
 	
 	//getters de los límites del objeto
 	public double getBordeDer() {
