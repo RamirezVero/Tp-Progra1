@@ -157,6 +157,11 @@ public class Juego extends InterfaceJuego
 		        hechizoSeleccionado = ""; 
 	    	}
 		}
+		if( gondolf.colisionaCon(murcielago)) {
+			gondolf.pierdeVida();
+			
+			System.out.println(gondolf.vidas);
+		}
 		
 		// Coordenadas de la barra
 		int barraX = 725;
