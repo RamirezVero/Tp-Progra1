@@ -23,9 +23,12 @@ public class Gondolf {
 	int bordePantallaSup;
 	int bordePantallaInf;
 	private char direccionActual; // 'a', 'd', 'w', 's'
-	int vidas;
 	Roca piedra1;
 	Murcielago murcielago;
+	int vidas= 10;
+	int vidaMaxima = 10;
+    int vidaActual = 10;
+	
 	
 
 	Entorno e;
@@ -46,13 +49,11 @@ public class Gondolf {
 		bordePantallaDer = 640;
 		bordePantallaIzq = 10;
 		bordePantallaSup = 30;
-		bordePantallaInf = 565;
-		vidas = 3;
+		bordePantallaInf = 565;	
 		
 		direccionActual = 'w';
 	}
 
-	
 	public void dibujar(Entorno e){
 		if(this.direccionActual == 'd') {
 			e.dibujarImagen(imgDerecha, x, y, 0,escala);
@@ -121,9 +122,10 @@ public class Gondolf {
 	}
 	
 	public void pierdeVida() {
-		this.vidas --;
-	}
-		
+        if (vidaActual > 0) {
+            vidaActual--;
+        }
+    }
 	
 	//getters de los límites del objeto
 	public double getBordeDer() {
