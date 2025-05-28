@@ -14,6 +14,8 @@ public class Gondolf {
 	double ancho;
 	double alto;
 	double angulo;
+	double velocidad;
+	double escala;
 	Image imgIzquierda;
 	Image imgDerecha;
 	Image imgFrente;
@@ -23,14 +25,16 @@ public class Gondolf {
 	int bordePantallaSup;
 	int bordePantallaInf;
 	private char direccionActual; // 'a', 'd', 'w', 's'
-	int vidas;
-	
-	Roca piedra1;
+
+	 // Estado del jugador
+    private int vidaActual = 10;
+    private int vidaMaxima = 100;
+    private int manaActual = 100;
+    private int manaMaxima = 100;
+    
 	Murcielago murcielago;
 
 	Entorno e;
-	double velocidad;
-	double escala;
 	
 	public Gondolf(int x, int y) {
 		this.x = x;
@@ -46,13 +50,11 @@ public class Gondolf {
 		bordePantallaDer = 640;
 		bordePantallaIzq = 10;
 		bordePantallaSup = 30;
-		bordePantallaInf = 565;
-		vidas = 3;
+		bordePantallaInf = 565;	
 		
 		direccionActual = 'w';
 	}
 
-	
 	public void dibujar(Entorno e){
 		if(this.direccionActual == 'd') {
 			e.dibujarImagen(imgDerecha, x, y, 0,escala);
@@ -97,15 +99,20 @@ public class Gondolf {
 	}
 	
 	public boolean estaVivo() {
-		if (this.vidas <=0 ) {
+		if (this.vidaActual <=0 ) {
 			return false;
 		}
 		return true;
 	}
 	
-	public void pierdeVida() {
-		this.vidas --;
-	}
+	// Actualizar valores
+    public void actualizarEstado(int vidaActual, int vidaMaxima, int manaActual, int manaMaxima, int enemigosEliminados) {
+        this.vidaActual = vidaActual;
+        this.vidaMaxima = vidaMaxima;
+        this.manaActual = manaActual;
+        this.manaMaxima = manaMaxima;
+    }
+	
 	//método para simular una posición futura y ver si colisionarían:
 	public boolean colisionariaCon(Roca r, double dx, double dy) {
 	    double nuevaX = this.x + dx;
@@ -131,8 +138,15 @@ public class Gondolf {
 	            this.getBordeSup() < murcielago.getBordeInf();
 	}
 	
+
+	public void pierdeVida() {
+        if (vidaActual > 0) {
+            vidaActual--;
+        }
+    }
+
 	
-	//getters de los límites del objeto
+	//getters de los límites del mago
 	public double getBordeDer() {
     	return this.x +(this.ancho/2);
     }    
@@ -145,7 +159,22 @@ public class Gondolf {
     public double getBordeInf() {
     	return this.y +(this.alto/2);
     }
-
+    
+    //getVida(), jugador.getVidaMaxima(), jugador.getMana(), jugador.getManaMaxima
+    public int getVidaActual() {
+    	return this.vidaActual;
+    }
+    
+    public int getVidaMaxima() {
+    	return this.vidaMaxima;
+    }
+    public int getManaActual() {
+    	return this.manaActual;
+    }
+    
+    public int getManaMaxima() {
+    	return this.manaMaxima;
+    }
 
 
 }

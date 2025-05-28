@@ -1,6 +1,6 @@
 package juego;
 
-import java.awt.Color;
+
 import java.awt.Image;
 
 import entorno.Entorno;
@@ -28,19 +28,7 @@ public class Murcielago {
 	    this.alto = murcielago.getHeight(null)* this.escala;
 	    
 	}
-	
-/*	public void dibujar(Entorno e) {
-		e.dibujarImagen(murcielago, this.x, this.y, 0, 0.4);
-	}
-	public void mover(Entorno e) {
-		this.x += velocidadX;
-		// Límite izquierdo (pared izquierda)
-		if (this.x <= 35|| this.x >= 610){
-			velocidadX *= -1;
-		}
 
-} */
-	
 	public void dibujarse(Entorno entorno)
 	{
 		//entorno.dibujarCirculo(this.x, this.y, 20,Color.RED);

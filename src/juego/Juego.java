@@ -5,6 +5,7 @@ import java.awt.Image;
 import entorno.Entorno;
 import entorno.Herramientas;
 import entorno.InterfaceJuego;
+import java.util.Random;
 
 public class Juego extends InterfaceJuego
 {
@@ -12,35 +13,38 @@ public class Juego extends InterfaceJuego
 	// Variables y métodos propios de cada grupo
 	private Entorno entorno;
 	private Image fondo;
+	private Image gameOver;
+	private Image ganador;
 
 	private Boton botonAgua;
 	private Boton botonFuego;
-	
 	private Roca[] rocas;
 	private Color miGris;
 	private Color miAzul;
-	private Color miRojo;	
-	private Murcielago murcielago;
+	private Color miRojo;				
+	private Murcielago[] murcielagos;
+	private int cantMurcielagos = 10;
+	private boolean perdiste = false;
 	Gondolf gondolf;
+	Random random = new Random();
 	
-	Hud hud = new Hud();
 	
 	private String hechizoSeleccionado = "";
-	private int vidaActual = 100;
-	private int vidaMaxima = 100;
-	private int manaActual = 100;
-	private int manaMaximo = 100;
+
 	private int contEnemigosEliminados = 0;
+
 	int menuX = 648;
 	int menuAncho = 610;
 	int menuAlto = 600;
-	
 	Juego()
 	{
 		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, "El camino de Gondolf", 800, 600);
+		int altoPantalla = entorno.alto();    // 600
 		// Inicializar lo que haga falta para el juego
 		this.fondo = Herramientas.cargarImagen("fondo.jpg");
+		this.gameOver = Herramientas.cargarImagen("perdiste.jpg");
+		this.ganador = Herramientas.cargarImagen("ganaste.jpg");
 		this.entorno.dibujarImagen(fondo, 400, 100, 0);
 	
 		this.miGris = new Color (122, 135, 150 );
@@ -53,18 +57,27 @@ public class Juego extends InterfaceJuego
 		this.rocas[1] = new Roca ( 550,150, 0.4, entorno);
 		this.rocas[2] = new Roca ( 350,200,0.5, entorno);
 		this.rocas[3] = new Roca ( 250,450,0.6, entorno);
-		this.rocas[4] = new Roca ( 450,350,0.7, entorno);
+		this.rocas[4] = new Roca ( 500,350,0.7, entorno);
 
-		this.murcielago = new Murcielago(100, 100, entorno); // x, y, velocidad
+
+		murcielagos = new Murcielago[cantMurcielagos];
 		this.gondolf = new Gondolf(400, 300);
-		
-		
 
+		for (int i = 0; i < cantMurcielagos; i++) {
+        int xRandom = random.nextInt(menuX);  // sólo entre 0 y 647 para no entrar al menú
+        int yRandom = random.nextInt(altoPantalla);  // entre 0 y 599, todo el alto
+        murcielagos[i] = new Murcielago(xRandom, yRandom, entorno);
+}
 
 
 		// Inicia el juego!
 		this.entorno.iniciar();
 		
+	}
+	private Murcielago generarMurcielagoAleatorioFueraDelMenu() {
+	    int xRandom = random.nextInt(menuX); // Evita el menú
+	    int yRandom = random.nextInt(entorno.alto());
+	    return new Murcielago(xRandom, yRandom, entorno);
 	}
 
 	/**
@@ -81,10 +94,11 @@ public class Juego extends InterfaceJuego
 		//botones
 		botonAgua.dibujar(entorno);
 		botonFuego.dibujar(entorno);
-		// actualizaciones)
-		hud.actualizarEstado(vidaActual, vidaMaxima, manaActual, manaMaximo, contEnemigosEliminados);
+		//hud.dibujar(entorno);
+	   //actualizaciones)
+		//hud.actualizarEstado(vidaActual, vidaMaxima, manaActual, manaMaxima, contEnemigosEliminados);
 		//hud.setVisibleSegúnEstadoDelJugador(gondolf.estaVivo());
-		hud.dibujar(entorno);
+		
 		
 		//Piedras
 		for (int i = 0; i < rocas.length; i++) {
@@ -92,9 +106,45 @@ public class Juego extends InterfaceJuego
 		}	
 
 		//Murcielago.mover();
-		murcielago.dibujarse(entorno);
-		murcielago.mover();
-		murcielago.cambiarAngulo(gondolf.x, gondolf.y);
+		for (int i = 0; i < murcielagos.length; i++) {
+		    Murcielago m = murcielagos[i];
+		    
+		    if (m != null) {
+		        m.mover();
+		        m.cambiarAngulo(gondolf.x, gondolf.y);
+		        m.dibujarse(entorno);
+
+		        // Colisión con Gondolf
+		        if (gondolf.colisionaCon(m)) {
+		            gondolf.pierdeVida();
+		            contEnemigosEliminados ++;
+		            System.out.println("Gondolf tiene " + gondolf.getVidaActual() + " vidas");
+
+		            // Murciélago desaparece y se crea uno nuevo en una posición válida
+		            murcielagos[i] = generarMurcielagoAleatorioFueraDelMenu();
+		        }
+		    }
+		}		
+		for (Murcielago m : murcielagos) {
+		    if (gondolf.colisionaCon(m)) {
+		        gondolf.pierdeVida();
+		        contEnemigosEliminados ++;
+		    }
+		}
+		
+		if (gondolf.getVidaActual() <= 0) {
+		    perdiste = true;
+		}
+		if (perdiste) {
+			this.entorno.dibujarImagen(gameOver, 400, 300, 0);
+		    /* Pantalla negra semitransparente
+		    entorno.dibujarRectangulo(entorno.ancho()/2, entorno.alto()/2, entorno.ancho(), entorno.alto(), 0, miGris);
+		    
+		    entorno.cambiarFont("Arial", 50, Color.RED, entorno.NEGRITA);
+		    entorno.escribirTexto("PERDISTE", entorno.ancho()/2 - 100, entorno.alto()/2);*/
+		    
+		    return; 
+		}
 		gondolf.dibujar(entorno);
 		
 		// Movimiento a la izquierda
@@ -164,45 +214,39 @@ public class Juego extends InterfaceJuego
 		        hechizoSeleccionado = ""; 
 	    	}
 		}
-		if( gondolf.colisionaCon(murcielago)) {
-			gondolf.pierdeVida();
-			contEnemigosEliminados ++;
-			
-			System.out.println(gondolf.vidas);
-		}
-		/*
+
+
 		// Coordenadas de la barra
 		int barraX = 725;
 		int barraYVida = 350;
 		int barraYMana = 390;
-		int anchoMaximo = 80;
-		int alto = 15;
+		int barraYEliminados = 430;
+		int anchoMaximo = 100;
+		int alto = 20;
 	
-		// Vidas en Barra Roja - Maná en la azul
-		int vidaActual = 100;
-		int vidaMaxima = 100;
-		int manaActual = 100;
-		int manaMaxima = 100;
+		
 		
 		// Cálculo de proporciones usando multiplicación con 1.0
-		double proporcionVida = 1.0 * vidaActual / vidaMaxima;
-		double proporcionMana = 1.0 * manaActual / manaMaxima;
+		//double proporcionVida = 1.0 * vidaActual / vidaMaxima;
+		double proporcionMana = 1.0 * gondolf.getManaActual() / gondolf.getManaMaxima();
 		// Barra de vida
-		entorno.dibujarRectangulo(barraX, barraYVida, anchoMaximo, alto, 0, Color.WHITE); // fondo
-		entorno.dibujarRectangulo(barraX, barraYVida, anchoMaximo * proporcionVida, alto, 0, Color.RED); // relleno
-		entorno.cambiarFont("Courier New", 14, Color.WHITE, entorno.NEGRITA);
-		entorno.escribirTexto(vidaActual + "/" + vidaMaxima, barraX - 20, barraYVida + 5);
+		double proporcionVida = 1.0 * gondolf.getVidaActual() / gondolf.getVidaMaxima();
 
+		entorno.dibujarRectangulo(barraX, barraYVida, anchoMaximo, alto, 0, Color.WHITE); // fondo
+		entorno.dibujarRectangulo(barraX, barraYVida, (int)(anchoMaximo * proporcionVida), alto, 0, Color.RED); // relleno
+		entorno.cambiarFont("Courier New", 14, Color.WHITE, entorno.NEGRITA);
+		entorno.escribirTexto( gondolf.getVidaActual() + "/" + gondolf.getVidaMaxima(), barraX - 20, barraYVida + 5);
 		// Barra de maná
 		entorno.dibujarRectangulo(barraX, barraYMana, anchoMaximo, alto, 0, Color.WHITE); // fondo
 		entorno.dibujarRectangulo(barraX, barraYMana, anchoMaximo * proporcionMana, alto, 0, Color.BLUE); // relleno
 		entorno.cambiarFont("Courier New", 14, Color.WHITE, entorno.NEGRITA);
-		entorno.escribirTexto(manaActual + "/" + manaMaxima, barraX - 20, barraYMana + 5);
+		entorno.escribirTexto(gondolf.getManaActual() + "/" + gondolf.getManaMaxima(), barraX - 20, barraYMana + 5);
 		
-		String eliminados=String.format("ELIMINADOS: "+ contEnemigosEliminados);
-        this.entorno.cambiarFont("Courier New",14,java.awt.Color.BLACK);
-        this.entorno.escribirTexto(eliminados,620,430);
-		*/
+		String eliminados=String.format("Eliminados:"+ contEnemigosEliminados);
+		entorno.dibujarRectangulo(barraX,barraYEliminados, anchoMaximo, alto, 0, Color.BLACK); // fondo
+        this.entorno.cambiarFont("Courier New", 12, Color.WHITE, entorno.NEGRITA);
+        this.entorno.escribirTexto(eliminados,680,433);
+		
 		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)
 				&& botonFuego.cursorSobreBoton(entorno)) {				
 				botonFuego.setColor(miGris);
@@ -240,7 +284,7 @@ public class Juego extends InterfaceJuego
 		
 		
 	}
-	
+
 	@SuppressWarnings("unused")
 	public static void main(String[] args)
 	{
