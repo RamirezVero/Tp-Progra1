@@ -24,6 +24,10 @@ public class Juego extends InterfaceJuego
 	private Color miRojo;				
 	private Murcielago[] murcielagos;
 	private int cantMurcielagos = 10;
+	
+	private int murcielagosGenerados = 0;
+	private final int totalMurcielagos = 50;
+	
 	private boolean perdiste = false;
 	Gondolf gondolf;
 	Random random = new Random();
@@ -43,7 +47,7 @@ public class Juego extends InterfaceJuego
 		int altoPantalla = entorno.alto();    // 600
 		// Inicializar lo que haga falta para el juego
 		this.fondo = Herramientas.cargarImagen("fondo.jpg");
-		this.gameOver = Herramientas.cargarImagen("perdiste.jpg");
+		this.gameOver = Herramientas.cargarImagen("perdiste-salir.jpg");
 		this.ganador = Herramientas.cargarImagen("ganaste.jpg");
 		this.entorno.dibujarImagen(fondo, 400, 100, 0);
 	
@@ -64,10 +68,11 @@ public class Juego extends InterfaceJuego
 		this.gondolf = new Gondolf(400, 300);
 
 		for (int i = 0; i < cantMurcielagos; i++) {
-        int xRandom = random.nextInt(menuX);  // sólo entre 0 y 647 para no entrar al menú
-        int yRandom = random.nextInt(altoPantalla);  // entre 0 y 599, todo el alto
-        murcielagos[i] = new Murcielago(xRandom, yRandom, entorno);
-}
+	        int xRandom = random.nextInt(menuX);  // sólo entre 0 y 647 para no entrar al menú
+	        int yRandom = random.nextInt(altoPantalla);  // entre 0 y 599, todo el alto
+	        murcielagos[i] = new Murcielago(xRandom, yRandom, entorno);
+	        murcielagosGenerados++;
+		}
 
 
 		// Inicia el juego!
@@ -79,7 +84,6 @@ public class Juego extends InterfaceJuego
 	    int yRandom = random.nextInt(entorno.alto());
 	    return new Murcielago(xRandom, yRandom, entorno);
 	}
-
 	/**
 	 * Durante el juego, el método tick() será ejecutado en cada instante y 
 	 * por lo tanto es el método más importante de esta clase. Aquí se debe 
@@ -94,11 +98,6 @@ public class Juego extends InterfaceJuego
 		//botones
 		botonAgua.dibujar(entorno);
 		botonFuego.dibujar(entorno);
-		//hud.dibujar(entorno);
-	   //actualizaciones)
-		//hud.actualizarEstado(vidaActual, vidaMaxima, manaActual, manaMaxima, contEnemigosEliminados);
-		//hud.setVisibleSegúnEstadoDelJugador(gondolf.estaVivo());
-		
 		
 		//Piedras
 		for (int i = 0; i < rocas.length; i++) {
@@ -118,10 +117,16 @@ public class Juego extends InterfaceJuego
 		        if (gondolf.colisionaCon(m)) {
 		            gondolf.pierdeVida();
 		            contEnemigosEliminados ++;
-		            System.out.println("Gondolf tiene " + gondolf.getVidaActual() + " vidas");
 
 		            // Murciélago desaparece y se crea uno nuevo en una posición válida
-		            murcielagos[i] = generarMurcielagoAleatorioFueraDelMenu();
+		            //murcielagos[i] = generarMurcielagoAleatorioFueraDelMenu();
+		         // Solo generar un nuevo murciélago si no se alcanzó el total
+		            if (murcielagosGenerados < totalMurcielagos) {
+		                murcielagos[i] = generarMurcielagoAleatorioFueraDelMenu();
+		                murcielagosGenerados++;
+		            } else {
+		                murcielagos[i] = null; // No se reemplaza, ya se llegó al total
+		            }
 		        }
 		    }
 		}		
@@ -134,27 +139,33 @@ public class Juego extends InterfaceJuego
 		
 		if (gondolf.getVidaActual() <= 0) {
 		    perdiste = true;
+		    
 		}
 		if (perdiste) {
-			this.entorno.dibujarImagen(gameOver, 400, 300, 0);
-		    /* Pantalla negra semitransparente
-		    entorno.dibujarRectangulo(entorno.ancho()/2, entorno.alto()/2, entorno.ancho(), entorno.alto(), 0, miGris);
+			this.entorno.dibujarImagen(gameOver, 400, 300, 0, 0.8);
+			if( entorno.sePresiono('f')) {
+		    	System.exit(0);
+		    }
 		    
-		    entorno.cambiarFont("Arial", 50, Color.RED, entorno.NEGRITA);
-		    entorno.escribirTexto("PERDISTE", entorno.ancho()/2 - 100, entorno.alto()/2);*/
+		    return; 
+		}
+		if (contEnemigosEliminados >= totalMurcielagos) {
+			this.entorno.dibujarImagen(ganador, 400, 300, 0);
+			if( entorno.sePresiono('f')) {
+		    	System.exit(0);
+		    }
 		    
 		    return; 
 		}
 		gondolf.dibujar(entorno);
 		
-		// Movimiento a la izquierda
+		// Movimiento del mago a la izquierda
 		if (entorno.estaPresionada('a')) {
 		    boolean hayColision = false;
 		   
 		    for (Roca roca : rocas) {		    	 
 		        if (gondolf.colisionariaCon(roca, -gondolf.velocidad, 0)) {
 		            hayColision = true;
-		            
 		        }
 		    }
 		    if (!hayColision) {
@@ -167,7 +178,6 @@ public class Juego extends InterfaceJuego
 		    for (Roca roca : rocas) {
 		        if (gondolf.colisionariaCon(roca, gondolf.velocidad, 0)) {
 		            hayColision = true;
-		            
 		        }
 		    }
 		    if (!hayColision) {
@@ -180,7 +190,6 @@ public class Juego extends InterfaceJuego
 		    for (Roca roca : rocas) {
 		        if (gondolf.colisionariaCon(roca, 0, -gondolf.velocidad)) {
 		            hayColision = true;
-		            
 		        }
 		    }
 		    if (!hayColision) {

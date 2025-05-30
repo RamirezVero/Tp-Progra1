@@ -131,7 +131,7 @@ public class Gondolf {
 
 		
 	public boolean colisionaCon( Murcielago murcielago) {
-		
+		if (murcielago == null) return false; 
 	    return this.getBordeDer() > murcielago.getBordeIzq() &&
 	            this.getBordeIzq() < murcielago.getBordeDer() &&
 	            this.getBordeInf() > murcielago.getBordeSup() &&
