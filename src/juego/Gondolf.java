@@ -27,7 +27,7 @@ public class Gondolf {
 	private char direccionActual; // 'a', 'd', 'w', 's'
 
 	 // Estado del jugador
-    private int vidaActual = 10;
+    private int vidaActual = 100;
     private int vidaMaxima = 100;
     private int manaActual = 100;
     private int manaMaxima = 100;

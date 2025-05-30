@@ -5,6 +5,8 @@ import java.awt.Image;
 import entorno.Entorno;
 import entorno.Herramientas;
 import entorno.InterfaceJuego;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Juego extends InterfaceJuego
@@ -31,15 +33,22 @@ public class Juego extends InterfaceJuego
 	private boolean perdiste = false;
 	Gondolf gondolf;
 	Random random = new Random();
+	Hechizos hFuego;
+	Hechizos hAgua;
 	
 	
 	private String hechizoSeleccionado = "";
+	ArrayList<Hechizos> listaHechizos = new ArrayList<>();
 
 	private int contEnemigosEliminados = 0;
 
 	int menuX = 648;
 	int menuAncho = 610;
 	int menuAlto = 600;
+	private Image areaFuego;
+	private Image areaAgua;
+	
+	
 	Juego()
 	{
 		// Inicializa el objeto entorno
@@ -62,7 +71,13 @@ public class Juego extends InterfaceJuego
 		this.rocas[2] = new Roca ( 350,200,0.5, entorno);
 		this.rocas[3] = new Roca ( 250,450,0.6, entorno);
 		this.rocas[4] = new Roca ( 500,350,0.7, entorno);
+		this.hFuego = new Hechizos(entorno.mouseX(), entorno.mouseY(), "Fuego", entorno );
+		this.hAgua = new Hechizos(entorno.mouseX(), entorno.mouseY(), "Agua", entorno );
+		// En constructor:
+		this.areaFuego = Herramientas.cargarImagen("hechizoFuego.gif"); // o areaAgua.png
+		this.areaAgua = Herramientas.cargarImagen("hechizoAgua.gif"); // o areaAgua.png
 
+		
 
 		murcielagos = new Murcielago[cantMurcielagos];
 		this.gondolf = new Gondolf(400, 300);
@@ -98,6 +113,7 @@ public class Juego extends InterfaceJuego
 		//botones
 		botonAgua.dibujar(entorno);
 		botonFuego.dibujar(entorno);
+		
 		
 		//Piedras
 		for (int i = 0; i < rocas.length; i++) {
@@ -261,11 +277,25 @@ public class Juego extends InterfaceJuego
 				botonFuego.setColor(miGris);
 				//botonFuego.estaPresionado(entorno.BOTON_IZQUIERDO);
 		}
-		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)
+		
+		/*if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+		    if (botonFuego.cursorSobreBoton(entorno)) {
+		        hechizoSeleccionado = "Fuego";
+		        botonFuego.setColor(miGris);
+		        botonAgua.setColor(miAzul); // restaurar color del otro
+		    } else if (botonAgua.cursorSobreBoton(entorno)) {
+		        hechizoSeleccionado = "Agua";
+		        botonAgua.setColor(miGris);
+		        botonFuego.setColor(miRojo); // restaurar color del otro
+		    }
+		}
+		/*if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)
 				&& botonAgua.cursorSobreBoton(entorno)) {				
 				botonAgua.setColor(miGris);
+				Hechizos hechizoAgua = new Hechizos(gondolf.x, gondolf.y, "Agua", entorno);
+		        listaHechizos.add(hechizoAgua);
 				//botonAgua.estaPresionado(entorno.BOTON_IZQUIERDO);
-		}
+		}*/
 		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
 		    if (botonFuego.cursorSobreBoton(entorno)) {
 		        if (!hechizoSeleccionado.equals("Fuego")) {
@@ -275,6 +305,12 @@ public class Juego extends InterfaceJuego
 		            botonFuego.setColor(miGris);
 		            // Guardar selección
 		            hechizoSeleccionado = "Fuego";
+		        }
+		        if (entorno.sePresionoBoton(entorno.BOTON_DERECHO)) {
+		            if (hechizoSeleccionado != null) {
+		                Hechizos nuevo = new Hechizos(entorno.mouseX(), entorno.mouseY(), hechizoSeleccionado, entorno);
+		                listaHechizos.add(nuevo);
+		            }
 		        }
 		    }
 
@@ -287,8 +323,40 @@ public class Juego extends InterfaceJuego
 		            // Guardar selección
 		            hechizoSeleccionado = "Agua";
 		        }
+		        if (entorno.sePresionoBoton(entorno.BOTON_DERECHO)) {
+		            if (hechizoSeleccionado != null) {
+		                Hechizos nuevo = new Hechizos(entorno.mouseX(), entorno.mouseY(), hechizoSeleccionado, entorno);
+		                listaHechizos.add(nuevo);
+		            }
+		        }
 		    }
 		}
+		
+		for (int i = 0; i < listaHechizos.size(); i++) {
+		    Hechizos h = listaHechizos.get(i);
+		    h.mover();
+		    h.dibujar(); // ya incluye el área de efecto si lo implementaste ahí
+
+		    // Colisión con murciélagos (esto podés agregarlo si aún no está)
+		    for (int j = 0; j < murcielagos.length; j++) {
+		        Murcielago m = murcielagos[j];
+		        if (m != null && h.activa && h.hechizoTocaMurcielago(h, m)) {
+		            murcielagos[j] = null;
+		            h.activa = false;
+		            System.out.println(h.hechizoTocaMurcielago(h, m));
+		        }
+		    }
+
+		    if (!h.activa) {
+		        listaHechizos.remove(i);
+		        i--;
+		    }
+		}
+
+		
+		
+
+
 		
 		
 		

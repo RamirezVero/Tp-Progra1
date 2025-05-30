@@ -17,11 +17,13 @@ public class Hechizos {
 	boolean activa;
 	Image imagen;
 	boolean fueEliminado = false;
+	Murcielago m;
 	String tipo; // "Fuego" o "Agua"
 
-	public Hechizos(int x, int y, String tipo, Entorno e) {
-		this.x = x;
-		this.y = y;
+	
+	public Hechizos(double x2, double y2, String tipo, Entorno e) {
+		this.x = x2;
+		this.y = y2;
 		this.activa = true;
 		this.tipo = tipo;
 		this.e = e;
@@ -45,8 +47,16 @@ public class Hechizos {
 	}
 
 	public void dibujar() {
-		if (activa) {
-		e.dibujarImagen(imagen, x, y, 0, 0.25); // Dibuja el hechizo en la pantalla
+		if (activa) {			
+			e.dibujarImagen(imagen, x, y, 0, 0.25); // Dibuja el hechizo en la pantalla
 		}
 	}
+	public boolean hechizoTocaMurcielago(Hechizos h, Murcielago m) {
+	    double radio = h.tipo.equals("Fuego") ? 50 : 30;
+	    double dx = h.x - m.x;
+	    double dy = h.y - m.y;
+	    double distancia = Math.sqrt(dx * dx + dy * dy);
+	    return distancia <= radio;
+	}
+
 }
