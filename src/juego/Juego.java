@@ -270,45 +270,8 @@ public class Juego extends InterfaceJuego {
 		}
 		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO) && botonFuego.cursorSobreBoton(entorno)) {
 			botonFuego.setColor(miGris);
-			// botonFuego.estaPresionado(entorno.BOTON_IZQUIERDO);
+		
 		}
-
-		/*
-		 * if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) { if
-		 * (botonFuego.cursorSobreBoton(entorno)) { hechizoSeleccionado = "Fuego";
-		 * botonFuego.setColor(miGris); botonAgua.setColor(miAzul); // restaurar color
-		 * del otro } else if (botonAgua.cursorSobreBoton(entorno)) {
-		 * hechizoSeleccionado = "Agua"; botonAgua.setColor(miGris);
-		 * botonFuego.setColor(miRojo); // restaurar color del otro } } /*if
-		 * (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO) &&
-		 * botonAgua.cursorSobreBoton(entorno)) { botonAgua.setColor(miGris); Hechizos
-		 * hechizoAgua = new Hechizos(gondolf.x, gondolf.y, "Agua", entorno);
-		 * listaHechizos.add(hechizoAgua);
-		 * //botonAgua.estaPresionado(entorno.BOTON_IZQUIERDO); }
-		 */
-
-		/*
-		 * if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) { if
-		 * (botonFuego.cursorSobreBoton(entorno)) { if
-		 * (!hechizoSeleccionado.equals("Fuego")) { // Restaurar el color del otro botón
-		 * botonAgua.setColor(miAzul); // Cambiar el color del botón actual
-		 * botonFuego.setColor(miGris); // Guardar selección hechizoSeleccionado =
-		 * "Fuego"; } if (entorno.sePresionoBoton(entorno.BOTON_DERECHO)) { if
-		 * (hechizoSeleccionado != null) { Hechizos nuevo = new
-		 * Hechizos(entorno.mouseX(), entorno.mouseY(), hechizoSeleccionado, entorno);
-		 * listaHechizos.add(nuevo); } } }
-		 * 
-		 * if (botonAgua.cursorSobreBoton(entorno)) { if
-		 * (!hechizoSeleccionado.equals("Agua")) { // Restaurar el color del otro botón
-		 * botonFuego.setColor(miRojo); // Cambiar el color del botón actual
-		 * botonAgua.setColor(miGris); // Guardar selección hechizoSeleccionado =
-		 * "Agua"; } if (entorno.sePresionoBoton(entorno.BOTON_DERECHO)) { if
-		 * (hechizoSeleccionado != null) { Hechizos nuevo = new
-		 * Hechizos(entorno.mouseX(), entorno.mouseY(), hechizoSeleccionado, entorno);
-		 * listaHechizos.add(nuevo); } } } }
-		 */
-
-		// YO
 
 		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
 			if (botonFuego.cursorSobreBoton(entorno)) {
@@ -336,7 +299,7 @@ public class Juego extends InterfaceJuego {
 		                listaHechizos.add(new Hechizos(mouseX, mouseY, hechizoSeleccionado, entorno));
 		            } else {
 		                mensajeManá = "¡¡¡No queda maná!!!";
-		                timerMensaje = 120; // 2 segundos si el juego va a 60 FPS
+		                timerMensaje = 120; // 2 segundos 
 		            }
 		        } else if (hechizoSeleccionado.equals("Agua")) {
 		            listaHechizos.add(new Hechizos(mouseX, mouseY, hechizoSeleccionado, entorno));
@@ -349,17 +312,15 @@ public class Juego extends InterfaceJuego {
 
 		for (int i = 0; i < listaHechizos.size(); i++) {
 			Hechizos h = listaHechizos.get(i);
-			// h.mover();
+			
 			h.dibujar(entorno); // ya incluye el área de efecto
-			// YO
+			
 
 			if (h.tipo.equals("Fuego")) {
 				entorno.dibujarImagen(areaFuego, h.x, h.y, 0, 0.7); // 0.7 = escala de imagen
 			} else if (h.tipo.equals("Agua")) {
 				entorno.dibujarImagen(areaAgua, h.x, h.y, 0, 0.7);
 			}
-
-			// YO arriba
 
 			// Colisión con murciélagos
 			for (int j = 0; j < murcielagos.length; j++) {
@@ -374,7 +335,7 @@ public class Juego extends InterfaceJuego {
 			        }
 			        h.activa = false;
 			        System.out.println(h.hechizoTocaMurcielago(m));
-			        contEnemigosEliminados++; // Si querés contar enemigos eliminados acá
+			        contEnemigosEliminados++; //
 			    }
 			}
 			if (!h.activa) {
