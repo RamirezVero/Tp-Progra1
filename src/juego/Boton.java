@@ -36,6 +36,7 @@ public class Boton {
 		return (mouseX >= this.getBordeIzq() && mouseX <= this.getBordeDer())
 				&& (mouseY >= this.getBordeSup() && mouseY <= this.getBordeInf());
 	}
+
 	public void setColor(Color c) {
 		this.color = c;
 		// hayHechizoSeleccionado = true;

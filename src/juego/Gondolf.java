@@ -113,6 +113,14 @@ public class Gondolf {
 		this.manaMaxima = manaMaxima;
 	}
 
+	public boolean colisionaCon(Gondolf g) {
+		double dx = this.x - g.getX();
+		double dy = this.y - g.getY();
+		double distancia = Math.sqrt(dx * dx + dy * dy);
+		double radioSuma = this.getRadio() + g.getRadio();
+		return distancia < radioSuma;
+	}
+
 	// método para simular una posición futura y ver si colisionarían:
 	public boolean colisionariaCon(Roca r, double dx, double dy) {
 		double nuevaX = this.x + dx;
@@ -139,11 +147,18 @@ public class Gondolf {
 			vidaActual--;
 		}
 	}
+
 	public void pierdeMana(int cantidad) {
-	    manaActual -= cantidad;
-	    if (manaActual < 0) {
-	        manaActual = 0; 
-	    }
+		manaActual -= cantidad;
+		if (manaActual < 0) {
+			manaActual = 0;
+		}
+	}
+
+	public void recuperarMana(int cantidad) {
+		this.manaActual += cantidad;
+		if (this.manaActual > 100)
+			this.manaActual = 100;
 	}
 
 	// getters de los límites del mago
@@ -178,6 +193,26 @@ public class Gondolf {
 
 	public int getManaMaxima() {
 		return this.manaMaxima;
+	}
+
+	public double getX() {
+		return this.x;
+	}
+
+	public double getY() {
+		return this.y;
+	}
+
+	public double getAncho() {
+		return this.ancho;
+	}
+
+	public double getAlto() {
+		return this.alto;
+	}
+
+	public double getRadio() {
+		return this.ancho / 2;
 	}
 
 }

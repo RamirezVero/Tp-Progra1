@@ -9,6 +9,8 @@ import entorno.InterfaceJuego;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.plaf.multi.MultiPopupMenuUI;
+
 public class Juego extends InterfaceJuego {
 	// El objeto Entorno que controla el tiempo y otros
 	// Variables y métodos propios de cada grupo
@@ -28,7 +30,7 @@ public class Juego extends InterfaceJuego {
 	private String mensajeManá = "";
 	private int timerMensaje = 0;
 
-	private int murcielagosGenerados = 0;
+	// private int murcielagosGenerados = 0;
 	private final int totalMurcielagos = 50;
 
 	private boolean perdiste = false;
@@ -39,7 +41,7 @@ public class Juego extends InterfaceJuego {
 
 	private String hechizoSeleccionado = "";
 	ArrayList<Hechizos> listaHechizos = new ArrayList<>();
-
+	private PocionMana[] pociones = new PocionMana[50];
 	private int contEnemigosEliminados = 0;
 
 	int menuX = 648;
@@ -72,17 +74,16 @@ public class Juego extends InterfaceJuego {
 		this.hFuego = new Hechizos(entorno.mouseX(), entorno.mouseY(), "Fuego", entorno);
 		this.hAgua = new Hechizos(entorno.mouseX(), entorno.mouseY(), "Agua", entorno);
 		// En constructor:
-		this.areaFuego = Herramientas.cargarImagen("hechizoFuego.gif"); // o areaAgua.png
+		this.areaFuego = Herramientas.cargarImagen("hechizoFuego.gif"); // o areafuego.png
 		this.areaAgua = Herramientas.cargarImagen("hechizoAgua.gif"); // o areaAgua.png
-
+		Herramientas.cargarSonido("agua.wav");
+		Herramientas.cargarSonido("fuego.wav");
 		murcielagos = new Murcielago[cantMurcielagos];
 		this.gondolf = new Gondolf(400, 300);
-
 		for (int i = 0; i < cantMurcielagos; i++) {
 			int xRandom = random.nextInt(menuX); // sólo entre 0 y 647 para no entrar al menú
 			int yRandom = random.nextInt(altoPantalla); // entre 0 y 599, todo el alto
 			murcielagos[i] = new Murcielago(xRandom, yRandom, entorno);
-			murcielagosGenerados++;
 		}
 
 		// Inicia el juego!
@@ -109,7 +110,11 @@ public class Juego extends InterfaceJuego {
 		// botones
 		botonAgua.dibujar(entorno);
 		botonFuego.dibujar(entorno);
-
+		for (PocionMana p : pociones) {
+			if (p != null) {
+				p.dibujar(entorno);
+			}
+		}
 		// Piedras
 		for (int i = 0; i < rocas.length; i++) {
 			rocas[i].dibujar(entorno);
@@ -127,45 +132,50 @@ public class Juego extends InterfaceJuego {
 				// Colisión con Gondolf
 				if (gondolf.colisionaCon(m)) {
 					gondolf.pierdeVida();
-					contEnemigosEliminados++;
-
-					// Murciélago desaparece y se crea uno nuevo en una posición válida
-					// murcielagos[i] = generarMurcielagoAleatorioFueraDelMenu();
-					// Solo generar un nuevo murciélago si no se alcanzó el total
-					if (murcielagosGenerados < totalMurcielagos) {
+					// NO se suma al contador de enemigos eliminados
+					if (gondolf.getVidaActual() > 0) {
 						murcielagos[i] = generarMurcielagoAleatorioFueraDelMenu();
-						murcielagosGenerados++;
 					} else {
-						murcielagos[i] = null; // No se reemplaza, ya se llegó al total
+						murcielagos[i] = null; // seguí generando aunque hayas alcanzado el total
 					}
 				}
 			}
 		}
+		// Condición de perder
+		if (gondolf.getVidaActual() <= 0) {
+			perdiste = true;
+		}
+
+		// Verifica si no queda ningún murciélago en pantalla
+		boolean quedanMurcielagosVivos = false;
 		for (Murcielago m : murcielagos) {
-			if (gondolf.colisionaCon(m)) {
-				gondolf.pierdeVida();
-				contEnemigosEliminados++;
+			if (m != null) {
+				quedanMurcielagosVivos = true;
+				break;
 			}
 		}
 
-		if (gondolf.getVidaActual() <= 0) {
+		// Si ya se generaron todos los murciélagos, no queda ninguno en pantalla
+		// y no mate los 50 -> perdiste
+		if (!quedanMurcielagosVivos && contEnemigosEliminados < totalMurcielagos) {
 			perdiste = true;
-
 		}
+
+		// Mostrar pantalla de perder
 		if (perdiste) {
 			this.entorno.dibujarImagen(gameOver, 400, 300, 0, 0.8);
 			if (entorno.sePresiono('f')) {
 				System.exit(0);
 			}
-
 			return;
 		}
+
+		// Mostrar pantalla de victoria si se mataron todos los murciélagos (50)
 		if (contEnemigosEliminados >= totalMurcielagos) {
 			this.entorno.dibujarImagen(ganador, 400, 300, 0);
 			if (entorno.sePresiono('f')) {
 				System.exit(0);
 			}
-
 			return;
 		}
 		gondolf.dibujar(entorno);
@@ -234,6 +244,19 @@ public class Juego extends InterfaceJuego {
 				hechizoSeleccionado = "";
 			}
 		}
+		// ArrayList<PocionMana> pocionesAEliminar = new ArrayList<>();
+
+		for (int i = 0; i < pociones.length; i++) {
+			PocionMana p = pociones[i];
+			if (p != null && p.colisionaCon(gondolf)) {
+				gondolf.recuperarMana(100);
+				pociones[i] = null; // la poción desaparece al ser recogida
+			}
+		}
+
+		/*
+		 * for (PocionMana p : pocionesAEliminar) { pociones.remove(p); }
+		 */
 
 		// Coordenadas de la barra
 		int barraX = 725;
@@ -264,13 +287,13 @@ public class Juego extends InterfaceJuego {
 		this.entorno.cambiarFont("Courier New", 12, Color.WHITE, entorno.NEGRITA);
 		this.entorno.escribirTexto(eliminados, 680, 433);
 		if (timerMensaje > 0) {
-		    entorno.cambiarFont("Arial", 30, Color.RED, entorno.NEGRITA);
-		    entorno.escribirTexto(mensajeManá, 350, 550); // Cambiá las coordenadas si querés moverlo
-		    timerMensaje--;
+			entorno.cambiarFont("Arial", 30, Color.RED, entorno.NEGRITA);
+			entorno.escribirTexto(mensajeManá, 350, 550); //
+			timerMensaje--;
 		}
 		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO) && botonFuego.cursorSobreBoton(entorno)) {
 			botonFuego.setColor(miGris);
-		
+
 		}
 
 		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
@@ -293,61 +316,67 @@ public class Juego extends InterfaceJuego {
 					&& mouseY <= menuAlto);
 
 			if (hechizoSeleccionado != null && clickFueraMenu) {
-		        if (hechizoSeleccionado.equals("Fuego")) {
-		            if (gondolf.getManaActual() >= 25) {
-		                gondolf.pierdeMana(25);
-		                listaHechizos.add(new Hechizos(mouseX, mouseY, hechizoSeleccionado, entorno));
-		            } else {
-		                mensajeManá = "¡¡¡No queda maná!!!";
-		                timerMensaje = 120; // 2 segundos 
-		            }
-		        } else if (hechizoSeleccionado.equals("Agua")) {
-		            listaHechizos.add(new Hechizos(mouseX, mouseY, hechizoSeleccionado, entorno));
-		        }
-		        hechizoSeleccionado = null;
-		        botonFuego.setColor(miRojo);
-		        botonAgua.setColor(miAzul);
+				if (hechizoSeleccionado.equals("Fuego")) {
+					if (gondolf.getManaActual() >= 25) {
+						gondolf.pierdeMana(25);
+						listaHechizos.add(new Hechizos(mouseX, mouseY, hechizoSeleccionado, entorno));
+						Herramientas.play("fuego.wav");
+					} else {
+						mensajeManá = "¡¡¡No queda maná!!!";
+						timerMensaje = 120; // 2 segundos
+					}
+				} else if (hechizoSeleccionado.equals("Agua")) {
+					listaHechizos.add(new Hechizos(mouseX, mouseY, hechizoSeleccionado, entorno));
+					Herramientas.play("agua.wav");
+				}
+				hechizoSeleccionado = null;
+				botonFuego.setColor(miRojo);
+				botonAgua.setColor(miAzul);
 			}
 		}
 
 		for (int i = 0; i < listaHechizos.size(); i++) {
 			Hechizos h = listaHechizos.get(i);
-			
-			h.dibujar(entorno); // ya incluye el área de efecto
-			
+			h.dibujar(entorno); // este método ya descuenta duracionFrames y desactiva si llega a 0
 
-			if (h.tipo.equals("Fuego")) {
-				entorno.dibujarImagen(areaFuego, h.x, h.y, 0, 0.7); // 0.7 = escala de imagen
-			} else if (h.tipo.equals("Agua")) {
-				entorno.dibujarImagen(areaAgua, h.x, h.y, 0, 0.7);
-			}
+			if (h.activa) {
+				for (int j = 0; j < murcielagos.length; j++) {
+					Murcielago m = murcielagos[j];
+					if (m != null) {
+						double distancia = Math.hypot(h.x - m.x, h.y - m.y);
+						if (distancia <= h.radio) {
+							contEnemigosEliminados++;
 
-			// Colisión con murciélagos
-			for (int j = 0; j < murcielagos.length; j++) {
-			    Murcielago m = murcielagos[j];
-			    if (m != null && h.activa && h.hechizoTocaMurcielago(m)) {
-			        // Reemplazar murciélago muerto por uno nuevo si no superamos el límite
-			        if (murcielagosGenerados < totalMurcielagos) {
-			            murcielagos[j] = generarMurcielagoAleatorioFueraDelMenu();
-			            murcielagosGenerados++;
-			        } else {
-			            murcielagos[j] = null;
-			        }
-			        h.activa = false;
-			        System.out.println(h.hechizoTocaMurcielago(m));
-			        contEnemigosEliminados++; //
-			    }
+							// Intentar generar una poción con 10% de probabilidad
+							if (Math.random() < 0.1) {
+								for (int k = 0; i < pociones.length; i++) {
+									if (pociones[k] == null) {
+										pociones[k] = new PocionMana(m.x, m.y);
+										break;
+									}
+								}
+							}
+
+							if (contEnemigosEliminados < totalMurcielagos) {
+								murcielagos[j] = generarMurcielagoAleatorioFueraDelMenu();
+							} else {
+								murcielagos[j] = null;
+							}
+						}
+					}
+				}
 			}
+			// Eliminar hechizo solo si ya terminó su duración
 			if (!h.activa) {
-			    listaHechizos.remove(i);		
-			    i--;
+				listaHechizos.remove(i);
+				i--;
 			}
 		}
 	}
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
-		Juego juego = new Juego();
+		new Juego();
 	}
 
 }
