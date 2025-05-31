@@ -19,14 +19,14 @@ public class Hechizos {
 	boolean fueEliminado = false;
 	Murcielago m;
 	String tipo; // "Fuego" o "Agua"
-
-	
+	private int duracionFrames;
 	public Hechizos(double x2, double y2, String tipo, Entorno e) {
 		this.x = x2;
 		this.y = y2;
 		this.activa = true;
 		this.tipo = tipo;
 		this.e = e;
+		this.duracionFrames = 15; // dura medio segundo
 		if (tipo.equals("Fuego")) {
 			imagen = Herramientas.cargarImagen("hechizoFuego.gif");
 			this.velocidad = 5; // veloc para hechizo de fuego
@@ -38,25 +38,21 @@ public class Hechizos {
 		this.alto = imagen.getHeight(null) * 0.25;
 	}
 
-	public void mover() {
-		x += velocidad;
-// Condiciones para desactivar el hechizo si sale de los límites
-		if (x <= 0 || x >= 800) {
-			activa = false;
-		}
-	}
+	public void dibujar(Entorno entorno) {
+        if (imagen != null) {
+            entorno.dibujarImagen(imagen, x, y, 0, 0.7);
+        }
+        duracionFrames--;
+        if (duracionFrames <= 0) {
+            activa = false;
+        }
+    }
 
-	public void dibujar() {
-		if (activa) {			
-			e.dibujarImagen(imagen, x, y, 0, 0.25); // Dibuja el hechizo en la pantalla
-		}
+	public boolean hechizoTocaMurcielago(Murcielago m) {
+		// Esto puede quedarse igual o lo podés adaptar si querés que no dañe
+		double dx = this.x - m.x;
+		double dy = this.y - m.y;
+		double distancia = Math.sqrt(dx * dx + dy * dy);
+		return distancia < 40; // o el radio de efecto que uses
 	}
-	public boolean hechizoTocaMurcielago(Hechizos h, Murcielago m) {
-	    double radio = h.tipo.equals("Fuego") ? 50 : 30;
-	    double dx = h.x - m.x;
-	    double dy = h.y - m.y;
-	    double distancia = Math.sqrt(dx * dx + dy * dy);
-	    return distancia <= radio;
-	}
-
 }
