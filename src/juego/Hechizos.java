@@ -32,7 +32,7 @@ public class Hechizos {
 			this.velocidad = 5; // veloc para hechizo de fuego
 		} else if (tipo.equals("Agua")) {
 			imagen = Herramientas.cargarImagen("hechizoAgua.gif");
-			this.velocidad = 3;
+			this.velocidad = 5;
 		}
 		this.ancho = imagen.getWidth(null) * 0.25;
 		this.alto = imagen.getHeight(null) * 0.25;

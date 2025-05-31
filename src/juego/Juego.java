@@ -128,6 +128,7 @@ public class Juego extends InterfaceJuego {
 				if (gondolf.colisionaCon(m)) {
 					gondolf.pierdeVida();
 					contEnemigosEliminados++;
+					
 
 					// Murciélago desaparece y se crea uno nuevo en una posición válida
 					// murcielagos[i] = generarMurcielagoAleatorioFueraDelMenu();
@@ -160,7 +161,8 @@ public class Juego extends InterfaceJuego {
 
 			return;
 		}
-		if (contEnemigosEliminados >= totalMurcielagos) {
+		if (contEnemigosEliminados >= totalMurcielagos) {		
+
 			this.entorno.dibujarImagen(ganador, 400, 300, 0);
 			if (entorno.sePresiono('f')) {
 				System.exit(0);
@@ -263,6 +265,7 @@ public class Juego extends InterfaceJuego {
 		entorno.dibujarRectangulo(barraX, barraYEliminados, anchoMaximo, alto, 0, Color.BLACK); // fondo
 		this.entorno.cambiarFont("Courier New", 12, Color.WHITE, entorno.NEGRITA);
 		this.entorno.escribirTexto(eliminados, 680, 433);
+		
 		if (timerMensaje > 0) {
 		    entorno.cambiarFont("Arial", 30, Color.RED, entorno.NEGRITA);
 		    entorno.escribirTexto(mensajeManá, 350, 550); // Cambiá las coordenadas si querés moverlo
@@ -317,8 +320,14 @@ public class Juego extends InterfaceJuego {
 			
 
 			if (h.tipo.equals("Fuego")) {
+				Herramientas.cargarSonido("impacto.wav");
+            	Herramientas.play("impacto.wav");
+
 				entorno.dibujarImagen(areaFuego, h.x, h.y, 0, 0.7); // 0.7 = escala de imagen
+				
 			} else if (h.tipo.equals("Agua")) {
+				Herramientas.cargarSonido("slime.wav");
+            	Herramientas.play("slime.wav");
 				entorno.dibujarImagen(areaAgua, h.x, h.y, 0, 0.7);
 			}
 
