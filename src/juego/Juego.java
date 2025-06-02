@@ -39,6 +39,8 @@ public class Juego extends InterfaceJuego {
 	ArrayList<Hechizos> listaHechizos = new ArrayList<>();
 	private PocionMana[] pociones = new PocionMana[50];
 	private int contEnemigosEliminados = 0;
+	
+	boolean sonidoReproducido = false;
 
 	int menuX = 648;
 	int menuAncho = 610;
@@ -53,7 +55,7 @@ public class Juego extends InterfaceJuego {
 		// Inicializar lo que haga falta para el juego
 		this.fondo = Herramientas.cargarImagen("fondo.jpg");
 		this.gameOver = Herramientas.cargarImagen("perdiste-salir.jpg");
-		this.ganador = Herramientas.cargarImagen("ganaste.jpg");
+		this.ganador = Herramientas.cargarImagen("Ganaste-salir.jpg");
 		this.entorno.dibujarImagen(fondo, 400, 100, 0);
 
 		this.miGris = new Color(122, 135, 150);
@@ -145,6 +147,11 @@ public class Juego extends InterfaceJuego {
 
 		// Mostrar pantalla de victoria si se mataron todos los murciélagos (50)
 		if (contEnemigosEliminados >= totalMurcielagos) {
+			if (!sonidoReproducido) {
+                Herramientas.cargarSonido("ganador.wav");
+                Herramientas.play("ganador.wav");
+                sonidoReproducido = true; // Evita que se vuelva a reproducir
+            };
 			this.entorno.dibujarImagen(ganador, 400, 300, 0);
 			if (entorno.sePresiono('f')) {
 				System.exit(0);
@@ -153,6 +160,11 @@ public class Juego extends InterfaceJuego {
 		}
 		// Mostrar pantalla de perder
 		if (perdiste) {
+			if (!sonidoReproducido) {
+                Herramientas.cargarSonido("kaput.wav");
+                Herramientas.play("kaput.wav");
+                sonidoReproducido = true; // Evita que se vuelva a reproducir
+            }
 			this.entorno.dibujarImagen(gameOver, 400, 300, 0, 0.8);
 			if (entorno.sePresiono('f')) {
 				System.exit(0);
